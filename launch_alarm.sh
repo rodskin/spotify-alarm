@@ -1,6 +1,7 @@
 #!/bin/bash
 volume=1
 sleep_volume_delay=5
+CURRENT_DIR=`pwd`
 
 rawurlencode() {
    local string="${1}"
@@ -21,11 +22,13 @@ rawurlencode() {
 # get the time
 LANG='fr'
 TEXT=$( rawurlencode "Il est 9h15" )
-echo $TEXT
-hash="$(echo -n "$TEXT" | md5sum )"
+echo "$TEXT ??"
+hash=`echo -n "${TEXT}" | md5sum`
+echo $hash
+
 API="http://translate.google.com/translate_tts?ie=UTF-8&tl=$LANG&q=$TEXT"
 UA="Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36"
-wget -o /dev/null --user-agent="$UA" -O "~/spotify-alarm/tmp/$hash.mp3" "$API"
+wget -o /dev/null --user-agent="$UA" -O "${CURRENT_DIR}/tmp/time.mp3" "$API"
 #aplay "/tmp/$hash.mp3"
 exit
 
