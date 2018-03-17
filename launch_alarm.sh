@@ -25,7 +25,7 @@ echo $TEXT
 hash="$(echo -n "$TEXT" | md5sum )"
 API="http://translate.google.com/translate_tts?ie=UTF-8&tl=$LANG&q=$TEXT"
 UA="Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36"
-wget -o /dev/null --user-agent="$UA" -O "/tmp/$hash.mp3" "$API"
+wget -o /dev/null --user-agent="$UA" -O "~/spotify-alarm/tmp/$hash.mp3" "$API"
 #aplay "/tmp/$hash.mp3"
 exit
 
