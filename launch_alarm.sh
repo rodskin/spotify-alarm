@@ -1,34 +1,25 @@
 #!/bin/bash
+# @TODO : add day time for cron
+# @TODO : add file conf for playlists
 volume=1
 sleep_volume_delay=5
 CURRENT_DIR=`pwd`
+echo $CURRENT_DIR
 
-rawurlencode() {
-   local string="${1}"
-   local strlen=${#string}
-   local encoded=""
+source lib/functions.sh
 
-   for (( pos=0 ; pos<strlen ; pos++ )); do
-      c=${string:$pos:1}
-      case "$c" in
-         [-_.~a-zA-Z0-9] ) o="${c}" ;;
-         * ) printf -v o '%%%02x' "'$c"
-      esac
-     encoded+="${o}"
-   done
-   echo "${encoded}"
-}
-
+DATE=`date +"%H:%M"`
+#echo $DATE
 # get the time
 LANG='fr'
-TEXT=$( rawurlencode "Il est 9h15" )
-echo "$TEXT ??"
-hash=`echo -n "${TEXT}" | md5sum`
-echo $hash
+python lib/google_tts.py $DATE $LANG
+exit
+TEXT=$( rawurlencode "Il est $DATE" )
+echo $TEXT
 
 API="http://translate.google.com/translate_tts?ie=UTF-8&tl=$LANG&q=$TEXT"
 UA="Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36"
-wget -o /dev/null --user-agent="$UA" -O "${CURRENT_DIR}/tmp/time.mp3" "$API"
+wget -o /dev/null --user-agent="$UA" -O "/tmp/time.mp3" "$API"
 #aplay "/tmp/$hash.mp3"
 exit
 
