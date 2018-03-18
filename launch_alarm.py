@@ -22,7 +22,7 @@ def readTime ():
 def playPlaylist () :
 	stopPlaylist()
 	os.system('mpc random 1')
-	os.system('mpc volume 30')
+	os.system('mpc volume 100')
 	os.system('mpc add spotify:user:icelandairwaves:playlist:3dNCFy3Q9d6LtGZLWT0c2O')
 	os.system('mpc play')
 	return;
