@@ -8,19 +8,9 @@ echo $CURRENT_DIR
 
 source lib/functions.sh
 
-DATE=`date +"%H:%M"`
-#echo $DATE
-# get the time
-LANG='fr'
-python lib/google_tts.py $DATE $LANG
+playdate
 exit
-TEXT=$( rawurlencode "Il est $DATE" )
-echo $TEXT
 
-API="http://translate.google.com/translate_tts?ie=UTF-8&tl=$LANG&q=$TEXT"
-UA="Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36"
-wget -o /dev/null --user-agent="$UA" -O "/tmp/time.mp3" "$API"
-#aplay "/tmp/$hash.mp3"
 exit
 
 mpc clear
@@ -35,14 +25,3 @@ do
    mpc volume ${volume}
    sleep ${sleep_volume_delay}
 done
-
-# get the time
-TEXT=$( rawurlencode "Il est 9h15" )
-API="http://translate.google.com/translate_tts?ie=UTF-8&tl=$LANG&q=$TEXT"
-
-
-
-
-
-
-

@@ -14,3 +14,12 @@ rawurlencode() {
    done
    echo "${encoded}"
 }
+
+playdate() {
+   DATE=`date +"%H:%M"`
+   #echo $DATE
+   # get the time
+   LANG='fr'
+   python lib/google_tts.py $DATE $LANG
+   mpg123 tmp/time.mp3
+}
