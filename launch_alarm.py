@@ -89,9 +89,9 @@ while True:
 		i = 1
 		for i in range(0, 3):
 			GPIO.output(etc.config.pin_led, GPIO.LOW)
-			time.sleep(1)
+			time.sleep(0.5)
 			GPIO.output(etc.config.pin_led, GPIO.HIGH)
-			time.sleep(1)
+			time.sleep(0.5)
 		GPIO.output(etc.config.pin_led, GPIO.LOW)
 		sys.exit()
 	else:
