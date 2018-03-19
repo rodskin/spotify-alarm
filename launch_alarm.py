@@ -15,6 +15,7 @@ except ImportError:
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(etc.config.pin_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pin_led, GPIO.OUT)   # Set pin mode as output
 
 def readTime ():
 	date = datetime.datetime.now()
@@ -27,11 +28,27 @@ def playPlaylist () :
 	stopPlaylist()
 	os.system('mpc add spotify:user:icelandairwaves:playlist:3dNCFy3Q9d6LtGZLWT0c2O')
 	os.system('mpc play')
+	ledBreathe()
 	return
 def stopPlaylist () :
 	os.system('mpc clear')
 	return
+def playPlaylist () :
+	try:
+        while True:
+            for dc in range(0, 101, 5):   # Increase duty cycle: 0~100
+                p.ChangeDutyCycle(dc)     # Change duty cycle
+                time.sleep(0.05)
+            time.sleep(1)
+            for dc in range(100, -1, -5): # Decrease duty cycle: 100~0
+                p.ChangeDutyCycle(dc)
+                time.sleep(0.05)
+            time.sleep(1)
+	return
 def load () :
+	GPIO.output(etc.config.pin_led, GPIO.LOW)
+	p = GPIO.PWM(LedPin, 1000)     # set Frequece to 1KHz
+	p.start(0)
 	stopPlaylist()
 	os.system('amixer set Master ' + str(etc.config.volume_music) + '%')
 	os.system('mpc random 1')
@@ -65,10 +82,20 @@ while True:
     print length
 
     if length > 3:
+    	print("Long Press")
+    	i = 1
+		while i < 5:
+    		GPIO.output(etc.config.pin_led, GPIO.LOW)
+    		time.sleep(0.5)
+    		GPIO.output(etc.config.pin_led, GPIO.HIGH)
+    		time.sleep(0.5)
+    		i ++
+    	GPIO.output(etc.config.pin_led, GPIO.LOW)
     	stopPlaylist()
         os.system('mpg123 tmp/stopping.mp3')
         sys.exit()
     else:
+    	print("Short Press")
         snooze()
 
 GPIO.cleanup()           # clean up GPIO on normal exit
