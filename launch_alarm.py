@@ -1,50 +1,73 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import etc.config
 import sys
 import os
 import gtts
 import datetime
 import time
-import RPi.GPIO as GPIO
-import etc.config
+try:
+	import RPi.GPIO as GPIO
+except ImportError:
+	import GPIOmock as GPIO
+	print('TESTING')
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(etc.config.pin_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def readTime ():
 	date = datetime.datetime.now()
 	current_time = "Il est " + str(date.hour) + ':' + str(date.minute)
-	lang = 'fr'
-	tts = gtts.gTTS(text=current_time, lang=lang)
+	tts = gtts.gTTS(text=current_time, lang=etc.config.lang)
 	tts.save("tmp/time.mp3")
 	os.system('mpg123 tmp/time.mp3')
-	return none
+	return
 def playPlaylist () :
 	stopPlaylist()
-	os.system('mpc random 1')
-	os.system('mpc volume 100')
 	os.system('mpc add spotify:user:icelandairwaves:playlist:3dNCFy3Q9d6LtGZLWT0c2O')
 	os.system('mpc play')
-	return none
+	return
 def stopPlaylist () :
 	os.system('mpc clear')
-	return none
+	return
+def load () :
+	stopPlaylist()
+	os.system('amixer set Master ' + str(etc.config.volume_music) + '%')
+	os.system('mpc random 1')
+	os.system('mpc volume 100')
+	return
 
-os.system('amixer set Master 50%')
+load()
 
 readTime()
 playPlaylist()
 
-def buttonPress(channel):
-    print "Button pressed!"
+def buttonPress():
+    print("Button pressed!")
     stopPlaylist()
-    time.sleep(5)
+    time.sleep(etc.config.time_snooze)
     readTime()
     playPlaylist()
-    return none
+    return
 
-GPIO.add_event_detect(23, GPIO.RISING, callback=buttonPress, bouncetime=300)
+GPIO.add_event_detect(etc.config.pin_button, GPIO.RISING, callback=buttonPress, bouncetime=button_bounce_time)
 
-raw_input("Listening...")
+while True:
+    GPIO.wait_for_edge(etc.config.pin_button, GPIO.FALLING)
+    print "Pressed"
+    start = time.time()
+    time.sleep(0.2)
+
+    while GPIO.input(PIN) == GPIO.LOW:
+        time.sleep(0.01)
+    length = time.time() - start
+    print length
+
+    if length > 3:
+        os.system('mpg123 tmp/stopping.mp3')
+        sys.exit()
+    else:
+        print "buttonPress"
+
 GPIO.cleanup()           # clean up GPIO on normal exit
