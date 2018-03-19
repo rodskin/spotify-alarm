@@ -35,7 +35,7 @@ def stopPlaylist () :
 	os.system('mpc clear')
 	return
 def ledBreathe () :
-	for i in range(0, 100):
+	for i in range(0, 5):
 		for dc in range(0, 101, 5):   # Increase duty cycle: 0~100
 			p.ChangeDutyCycle(dc)	 # Change duty cycle
 			time.sleep(0.05)
