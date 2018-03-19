@@ -46,7 +46,7 @@ def ledBreathe () :
 	return
 def load () :
 	GPIO.output(etc.config.pin_led, GPIO.LOW)
-	p = GPIO.PWM(LedPin, 1000)	 # set Frequece to 1KHz
+	p = GPIO.PWM(etc.config.pin_led, 1000)	 # set Frequece to 1KHz
 	p.start(0)
 	stopPlaylist()
 	os.system('amixer set Master ' + str(etc.config.volume_music) + '%')
