@@ -59,7 +59,7 @@ while True:
     start = time.time()
     time.sleep(0.2)
 
-    while GPIO.input(PIN) == GPIO.LOW:
+    while GPIO.input(etc.config.pin_button) == GPIO.LOW:
         time.sleep(0.01)
     length = time.time() - start
     print length
