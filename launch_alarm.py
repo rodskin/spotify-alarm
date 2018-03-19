@@ -79,6 +79,8 @@ while True:
 
 	while GPIO.input(etc.config.pin_button) == GPIO.LOW:
 		time.sleep(0.01)
+		if ((time.time() - start) > 3 ) :
+			print("Long Press > 3")
 	length = time.time() - start
 	print length
 
