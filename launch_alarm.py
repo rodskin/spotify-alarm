@@ -43,7 +43,7 @@ load()
 readTime()
 playPlaylist()
 
-def buttonPress():
+def snooze():
     print("Button pressed!")
     stopPlaylist()
     time.sleep(etc.config.time_snooze)
@@ -51,7 +51,7 @@ def buttonPress():
     playPlaylist()
     return
 
-GPIO.add_event_detect(etc.config.pin_button, GPIO.RISING, callback=buttonPress, bouncetime=button_bounce_time)
+#GPIO.add_event_detect(etc.config.pin_button, GPIO.RISING, callback=buttonPress, bouncetime=button_bounce_time)
 
 while True:
     GPIO.wait_for_edge(etc.config.pin_button, GPIO.FALLING)
