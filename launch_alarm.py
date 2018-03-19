@@ -48,7 +48,7 @@ def ledBreathe () :
 	return
 def load () :
 	GPIO.output(etc.config.pin_led, GPIO.LOW)
-	p.start(0)
+	#p.start(0)
 	stopPlaylist()
 	os.system('amixer set Master ' + str(etc.config.volume_music) + '%')
 	os.system('mpc random 1')
