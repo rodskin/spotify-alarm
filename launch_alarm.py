@@ -29,7 +29,8 @@ def playPlaylist () :
 	stopPlaylist()
 	os.system('mpc add spotify:user:icelandairwaves:playlist:3dNCFy3Q9d6LtGZLWT0c2O')
 	os.system('mpc play')
-	ledBreathe()
+	#ledBreathe()
+	GPIO.output(etc.config.pin_led, GPIO.HIGH)
 	return
 def stopPlaylist () :
 	os.system('mpc clear')
@@ -61,6 +62,7 @@ playPlaylist()
 
 def snooze():
 	print("Button pressed!")
+	GPIO.output(etc.config.pin_led, GPIO.LOW)
 	stopPlaylist()
 	time.sleep(etc.config.time_snooze)
 	readTime()
@@ -83,11 +85,11 @@ while True:
 	if length > 3:
 		print("Long Press")
 		i = 1
-		for i in range(0, 5):
+		for i in range(0, 3):
 			GPIO.output(etc.config.pin_led, GPIO.LOW)
-			time.sleep(0.5)
+			time.sleep(1)
 			GPIO.output(etc.config.pin_led, GPIO.HIGH)
-			time.sleep(0.5)
+			time.sleep(1)
 		GPIO.output(etc.config.pin_led, GPIO.LOW)
 		stopPlaylist()
 		os.system('mpg123 tmp/stopping.mp3')
