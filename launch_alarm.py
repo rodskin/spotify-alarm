@@ -16,6 +16,7 @@ except ImportError:
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(etc.config.pin_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(etc.config.pin_led, GPIO.OUT)   # Set pin mode as output
+p = GPIO.PWM(etc.config.pin_led, 1000)	 # set Frequece to 1KHz
 
 def readTime ():
 	date = datetime.datetime.now()
@@ -46,7 +47,6 @@ def ledBreathe () :
 	return
 def load () :
 	GPIO.output(etc.config.pin_led, GPIO.LOW)
-	p = GPIO.PWM(etc.config.pin_led, 1000)	 # set Frequece to 1KHz
 	p.start(0)
 	stopPlaylist()
 	os.system('amixer set Master ' + str(etc.config.volume_music) + '%')
