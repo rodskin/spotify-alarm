@@ -65,9 +65,10 @@ while True:
     print length
 
     if length > 3:
+    	stopPlaylist()
         os.system('mpg123 tmp/stopping.mp3')
         sys.exit()
     else:
-        print "buttonPress"
+        snooze()
 
 GPIO.cleanup()           # clean up GPIO on normal exit
