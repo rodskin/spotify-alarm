@@ -33,21 +33,21 @@ def playPlaylist () :
 def stopPlaylist () :
 	os.system('mpc clear')
 	return
-def playPlaylist () :
+def ledBreathe () :
 	try:
-        while True:
-            for dc in range(0, 101, 5):   # Increase duty cycle: 0~100
-                p.ChangeDutyCycle(dc)     # Change duty cycle
-                time.sleep(0.05)
-            time.sleep(1)
-            for dc in range(100, -1, -5): # Decrease duty cycle: 100~0
-                p.ChangeDutyCycle(dc)
-                time.sleep(0.05)
-            time.sleep(1)
+		while True:
+			for dc in range(0, 101, 5):   # Increase duty cycle: 0~100
+				p.ChangeDutyCycle(dc)	 # Change duty cycle
+				time.sleep(0.05)
+			time.sleep(1)
+			for dc in range(100, -1, -5): # Decrease duty cycle: 100~0
+				p.ChangeDutyCycle(dc)
+				time.sleep(0.05)
+			time.sleep(1)
 	return
 def load () :
 	GPIO.output(etc.config.pin_led, GPIO.LOW)
-	p = GPIO.PWM(LedPin, 1000)     # set Frequece to 1KHz
+	p = GPIO.PWM(LedPin, 1000)	 # set Frequece to 1KHz
 	p.start(0)
 	stopPlaylist()
 	os.system('amixer set Master ' + str(etc.config.volume_music) + '%')
@@ -61,41 +61,41 @@ readTime()
 playPlaylist()
 
 def snooze():
-    print("Button pressed!")
-    stopPlaylist()
-    time.sleep(etc.config.time_snooze)
-    readTime()
-    playPlaylist()
-    return
+	print("Button pressed!")
+	stopPlaylist()
+	time.sleep(etc.config.time_snooze)
+	readTime()
+	playPlaylist()
+	return
 
 #GPIO.add_event_detect(etc.config.pin_button, GPIO.RISING, callback=buttonPress, bouncetime=button_bounce_time)
 
 while True:
-    GPIO.wait_for_edge(etc.config.pin_button, GPIO.FALLING)
-    print "Pressed"
-    start = time.time()
-    time.sleep(0.2)
+	GPIO.wait_for_edge(etc.config.pin_button, GPIO.FALLING)
+	print "Pressed"
+	start = time.time()
+	time.sleep(0.2)
 
-    while GPIO.input(etc.config.pin_button) == GPIO.LOW:
-        time.sleep(0.01)
-    length = time.time() - start
-    print length
+	while GPIO.input(etc.config.pin_button) == GPIO.LOW:
+		time.sleep(0.01)
+	length = time.time() - start
+	print length
 
-    if length > 3:
-    	print("Long Press")
-    	i = 1
+	if length > 3:
+		print("Long Press")
+		i = 1
 		while i < 5:
-    		GPIO.output(etc.config.pin_led, GPIO.LOW)
-    		time.sleep(0.5)
-    		GPIO.output(etc.config.pin_led, GPIO.HIGH)
-    		time.sleep(0.5)
-    		i ++
-    	GPIO.output(etc.config.pin_led, GPIO.LOW)
-    	stopPlaylist()
-        os.system('mpg123 tmp/stopping.mp3')
-        sys.exit()
-    else:
-    	print("Short Press")
-        snooze()
+			GPIO.output(etc.config.pin_led, GPIO.LOW)
+			time.sleep(0.5)
+			GPIO.output(etc.config.pin_led, GPIO.HIGH)
+			time.sleep(0.5)
+			i ++
+		GPIO.output(etc.config.pin_led, GPIO.LOW)
+		stopPlaylist()
+		os.system('mpg123 tmp/stopping.mp3')
+		sys.exit()
+	else:
+		print("Short Press")
+		snooze()
 
-GPIO.cleanup()           # clean up GPIO on normal exit
+GPIO.cleanup()		   # clean up GPIO on normal exit
