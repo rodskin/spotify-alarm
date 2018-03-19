@@ -19,6 +19,7 @@ GPIO.setup(etc.config.pin_led, GPIO.OUT)   # Set pin mode as output
 p = GPIO.PWM(etc.config.pin_led, 1000)	 # set Frequece to 1KHz
 
 def readTime ():
+	GPIO.output(etc.config.pin_led, GPIO.HIGH)
 	date = datetime.datetime.now()
 	current_time = "Il est " + str(date.hour) + ':' + str(date.minute)
 	tts = gtts.gTTS(text=current_time, lang=etc.config.lang)
@@ -30,7 +31,6 @@ def playPlaylist () :
 	os.system('mpc add spotify:user:icelandairwaves:playlist:3dNCFy3Q9d6LtGZLWT0c2O')
 	os.system('mpc play')
 	#ledBreathe()
-	GPIO.output(etc.config.pin_led, GPIO.HIGH)
 	return
 def stopPlaylist () :
 	os.system('mpc clear')
@@ -84,6 +84,8 @@ while True:
 
 	if length > 3:
 		print("Long Press")
+		stopPlaylist()
+		os.system('mpg123 tmp/stopping.mp3')
 		i = 1
 		for i in range(0, 3):
 			GPIO.output(etc.config.pin_led, GPIO.LOW)
@@ -91,8 +93,6 @@ while True:
 			GPIO.output(etc.config.pin_led, GPIO.HIGH)
 			time.sleep(1)
 		GPIO.output(etc.config.pin_led, GPIO.LOW)
-		stopPlaylist()
-		os.system('mpg123 tmp/stopping.mp3')
 		sys.exit()
 	else:
 		print("Short Press")
