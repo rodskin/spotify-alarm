@@ -31,6 +31,8 @@ def stopPlaylist () :
 	os.system('mpc clear')
 	return none
 
+os.system('amixer set Master 50%')
+
 readTime()
 playPlaylist()
 
