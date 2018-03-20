@@ -25,8 +25,8 @@ def readTime ():
 	date = datetime.datetime.now()
 	current_time = "Il est " + str(date.hour) + 'h' + str(date.minute)
 	tts = gtts.gTTS(text=current_time, lang=etc.config.lang)
-	tts.save(dir_path + '/tmp/time.mp3')
-	os.system('mpg123 ' + dir_path + '/tmp/time.mp3')
+	tts.save(dir_path + '/mp3/time.mp3')
+	os.system('mpg123 ' + dir_path + '/mp3/time.mp3')
 	return
 def playPlaylist () :
 	stopPlaylist()
@@ -58,7 +58,7 @@ def ledBreathe () :
 def stopScript () :
 	print("Long Press")
 	stopPlaylist()
-	os.system('mpg123 ' + dir_path + '/tmp/stopping.mp3')
+	os.system('mpg123 ' + dir_path + '/mp3/stopping.mp3')
 	i = 1
 	for i in range(0, 3):
 		GPIO.output(etc.config.pin_led, GPIO.LOW)

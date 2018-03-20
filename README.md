@@ -35,3 +35,8 @@ In order to use a crontab for the script, you need to make it executable
 and create a crontab `crontab -e`
 
 `15 7 * * 1-5 /home/user/spotify-alarm/launch_alarm.py`
+
+## @TODO
+- check connexion and play classic mp3 instead of spotify playlist
+- add weather API for temperature, weather, wind direction / speed (par coded in openweather.py)
+- find how to use the led while the script is playing (sleep makes it "freeze")
