@@ -92,8 +92,9 @@ while True:
 		time.sleep(0.01)
 		if ((time.time() - start) > 3 ) :
 			print("Long Press > 3")
+			stopScript()
 	length = time.time() - start
-	
+
 	if length <= 3:
 		print("Short Press")
 		snooze()
