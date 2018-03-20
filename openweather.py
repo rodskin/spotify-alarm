@@ -55,6 +55,14 @@ def toNmi (msValue) :
     nmi = msValue * 1.9438444924406
     return nmi
 
+def windDirection(angle) :
+    # 360 / 16
+    rosace_list = ['Nord', 'Nord Nord Est', 'Nord Est', 'Est Nord Est', 'Est', 'Est Sud Est', 'Sud Est', 'Sud Sud Est', 'Sud', 'Sud Sud Ouest', 'Sud Ouest', 'Ouest Sud Ouest', 'Ouest', 'Ouest Nord Ouest', 'Nord Ouest', 'Nord Nord Ouest', 'Nord']
+    #print(rosace_list)
+    print(rosace_list[int(math.floor(angle / (360 / 16)))])
+    #print(len(rosace_list))
+    return angle
+
 def data_output(data):
     m_symbol = '\xb0' + 'C'
     print('---------------------------------------')
