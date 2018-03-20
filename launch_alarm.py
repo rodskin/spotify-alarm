@@ -21,7 +21,7 @@ GPIO.setup(etc.config.pin_led, GPIO.OUT)   # Set pin mode as output
 def readTime ():
 	GPIO.output(etc.config.pin_led, GPIO.HIGH)
 	date = datetime.datetime.now()
-	current_time = "Il est " + str(date.hour) + ':' + str(date.minute)
+	current_time = "Il est " + str(date.hour) + 'h' + str(date.minute)
 	tts = gtts.gTTS(text=current_time, lang=etc.config.lang)
 	tts.save("tmp/time.mp3")
 	os.system('mpg123 tmp/time.mp3')
