@@ -13,6 +13,9 @@ except ImportError:
 	import GPIOmock as GPIO
 	print('TESTING')
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+print(dir_path)
+sys.exit()
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(etc.config.pin_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(etc.config.pin_led, GPIO.OUT)   # Set pin mode as output
@@ -24,7 +27,7 @@ def readTime ():
 	current_time = "Il est " + str(date.hour) + 'h' + str(date.minute)
 	tts = gtts.gTTS(text=current_time, lang=etc.config.lang)
 	tts.save("tmp/time.mp3")
-	os.system('mpg123 tmp/time.mp3')
+	os.system('mpg123 ' + dir_path + '/tmp/time.mp3')
 	return
 def playPlaylist () :
 	stopPlaylist()
@@ -56,7 +59,7 @@ def ledBreathe () :
 def stopScript () :
 	print("Long Press")
 	stopPlaylist()
-	os.system('mpg123 tmp/stopping.mp3')
+	os.system('mpg123 ' + dir_path + '/tmp/stopping.mp3')
 	i = 1
 	for i in range(0, 3):
 		GPIO.output(etc.config.pin_led, GPIO.LOW)
