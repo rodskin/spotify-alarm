@@ -35,6 +35,13 @@ def playPlaylist () :
 def stopPlaylist () :
 	os.system('mpc clear')
 	return
+def snooze():
+	GPIO.output(etc.config.pin_led, GPIO.LOW)
+	stopPlaylist()
+	time.sleep(etc.config.time_snooze)
+	readTime()
+	playPlaylist()
+	return
 def ledBreathe () :
 	for i in range(0, 5):
 		for dc in range(0, 101, 5):   # Increase duty cycle: 0~100
@@ -46,6 +53,18 @@ def ledBreathe () :
 			time.sleep(0.05)
 		time.sleep(1)
 	return
+def stopScript () :
+	print("Long Press")
+	stopPlaylist()
+	os.system('mpg123 tmp/stopping.mp3')
+	i = 1
+	for i in range(0, 3):
+		GPIO.output(etc.config.pin_led, GPIO.LOW)
+		time.sleep(0.5)
+		GPIO.output(etc.config.pin_led, GPIO.HIGH)
+		time.sleep(0.5)
+	GPIO.output(etc.config.pin_led, GPIO.LOW)
+	sys.exit()
 def load () :
 	GPIO.output(etc.config.pin_led, GPIO.LOW)
 	#p.start(0)
@@ -60,14 +79,6 @@ load()
 readTime()
 playPlaylist()
 
-def snooze():
-	print("Button pressed!")
-	GPIO.output(etc.config.pin_led, GPIO.LOW)
-	stopPlaylist()
-	time.sleep(etc.config.time_snooze)
-	readTime()
-	playPlaylist()
-	return
 
 #GPIO.add_event_detect(etc.config.pin_button, GPIO.RISING, callback=buttonPress, bouncetime=button_bounce_time)
 
@@ -82,21 +93,8 @@ while True:
 		if ((time.time() - start) > 3 ) :
 			print("Long Press > 3")
 	length = time.time() - start
-	print length
-
-	if length > 3:
-		print("Long Press")
-		stopPlaylist()
-		os.system('mpg123 tmp/stopping.mp3')
-		i = 1
-		for i in range(0, 3):
-			GPIO.output(etc.config.pin_led, GPIO.LOW)
-			time.sleep(0.5)
-			GPIO.output(etc.config.pin_led, GPIO.HIGH)
-			time.sleep(0.5)
-		GPIO.output(etc.config.pin_led, GPIO.LOW)
-		sys.exit()
-	else:
+	
+	if length <= 3:
 		print("Short Press")
 		snooze()
 
