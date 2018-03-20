@@ -29,6 +29,9 @@ https://www.mopidy.com/authenticate/#spotify
 
 ## CRON
 In order to use a crontab for the script, you need to make it executable
+
 `chmod -x launch_alarm.py`
+
 and create a crontab `crontab -e`
+
 `15 7 * * 1-5 /home/user/spotify-alarm/launch_alarm.py`
