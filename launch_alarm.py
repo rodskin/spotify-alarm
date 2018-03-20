@@ -26,7 +26,7 @@ def readTime ():
 	date = datetime.datetime.now()
 	current_time = "Il est " + str(date.hour) + 'h' + str(date.minute)
 	tts = gtts.gTTS(text=current_time, lang=etc.config.lang)
-	tts.save("tmp/time.mp3")
+	tts.save(dir_path + '/tmp/time.mp3')
 	os.system('mpg123 ' + dir_path + '/tmp/time.mp3')
 	return
 def playPlaylist () :
