@@ -84,7 +84,7 @@ playPlaylist()
 
 while True:
 	GPIO.wait_for_edge(etc.config.pin_button, GPIO.FALLING)
-	print "Pressed"
+	print('Pressed')
 	start = time.time()
 	time.sleep(0.2)
 
