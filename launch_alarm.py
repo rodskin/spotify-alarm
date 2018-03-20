@@ -14,8 +14,7 @@ except ImportError:
 	print('TESTING')
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-print(dir_path)
-sys.exit()
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(etc.config.pin_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(etc.config.pin_led, GPIO.OUT)   # Set pin mode as output
