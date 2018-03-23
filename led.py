@@ -4,12 +4,13 @@ import time
 
 LedPin = 25
 
-GPIO.setmode(GPIO.BOARD)       # Numbers pins by physical location
+GPIO.setmode(GPIO.BCM)       # Numbers pins by physical location
 GPIO.setup(LedPin, GPIO.OUT)   # Set pin mode as output
 GPIO.output(LedPin, GPIO.LOW)  # Set pin to low(0V)
 
 p = GPIO.PWM(LedPin, 1000)     # set Frequece to 1KHz
 p.start(0)                     # Start PWM output, Duty Cycle = 0
+GPIO.output(LedPin, GPIO.LOW)
 
 try:
         while True:

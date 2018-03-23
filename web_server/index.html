@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <title>Mon programme</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <form action="/index.py" method="post">
+        <input type="text" name="name" placeholder="Votre nom" />
+        <select id="playlists"></select>
+        <div class="knob-surround">
+  
+            <div class="knob"></div>
+
+            <span class="min">Min</span>
+            <span class="max">Max</span>
+
+            <div class="ticks">
+                <div class="tick activetick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+            </div>
+
+        </div>
+
+        <p>Hover over the volume knob and use mousewheel to change value. It would be relatively easy to add drag/touch gesture support also.</p>
+        <p>Current value: <span class="current-value">0%</span></p>
+        <input type="submit" name="send" value="Envoyer information au serveur" />
+    </form>
+    <script type="text/javascript">
+        function loadJSON(callback) {
+            var xobj = new XMLHttpRequest();
+                xobj.overrideMimeType("application/json");
+            xobj.open('GET', 'playlists.json', true); // Replace 'my_data' with the path to your file
+            xobj.onreadystatechange = function () {
+                  if (xobj.readyState == 4 && xobj.status == "200") {
+                    // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+                    callback(xobj.responseText);
+                  }
+            };
+            xobj.send(null);
+        }
+        console.log('tight');
+        // Call to function with anonymous callback
+        loadJSON(function(response) {
+            // Do Something with the response e.g.
+            jsonresponse = JSON.parse(response);
+            console.log(jsonresponse);
+            for (var playlist in jsonresponse.items) {
+                jQuery('#playlists').append('<option value="' + jsonresponse.items[playlist].uri + '">' + jsonresponse.items[playlist].name + '</option>');
+            }
+            // Assuming json data is wrapped in square brackets as Drew suggests
+            //console.log(jsonresponse[0].name);
+        });
+        var knob = $('.knob');
+        var angle = 0;
+        var minangle = 0;
+        var maxangle = 270;
+
+        function moveKnob(direction) {
+          
+          if(direction == 'up') {
+            if((angle + 2) <= maxangle) {
+              angle = angle + 2;
+              setAngle();
+            }
+          }
+          
+          else if(direction == 'down') {
+            if((angle - 2) >= minangle) {
+              angle = angle - 2;
+              setAngle();
+            }
+          }
+
+        }
+
+        function setAngle() {
+
+          // rotate knob
+          knob.css({
+            '-moz-transform':'rotate('+angle+'deg)',
+            '-webkit-transform':'rotate('+angle+'deg)',
+            '-o-transform':'rotate('+angle+'deg)',
+            '-ms-transform':'rotate('+angle+'deg)',
+            'transform':'rotate('+angle+'deg)'
+          });
+          
+          // highlight ticks
+          var activeTicks = (Math.round(angle / 10) + 1);
+          $('.tick').removeClass('activetick');
+          $('.tick').slice(0,activeTicks).addClass('activetick');
+          
+          // update % value in text
+          var pc = Math.round((angle/270)*100);
+          $('.current-value').text(pc+'%');
+          
+        }
+
+        // mousewheel event - firefox
+        knob.bind('DOMMouseScroll', function(e){
+          if(e.originalEvent.detail > 0) {
+            moveKnob('down');
+          } else {
+            moveKnob('up');
+          }
+          return false;
+        });
+
+        // mousewheel event - ie, safari, opera
+        knob.bind('mousewheel', function(e){
+          if(e.originalEvent.wheelDelta < 0) {
+            moveKnob('down');
+          } else {
+            moveKnob('up');
+          }
+          return false;
+        });
+
+    </script>
+</body>
+</html>
