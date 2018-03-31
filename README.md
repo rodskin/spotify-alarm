@@ -8,6 +8,7 @@
 - Spotify Premium account
 - mopidy
 - mpc
+- mpd
 
 ### Mopidy
 
@@ -23,6 +24,12 @@ sudo apt-get install mopidy-spotify
 
 edit `/etc/mopidy/mopidy.conf` with the `sample/mopidy.conf`
 
+### MPD
+```
+sudo apt-get install mpd
+edit /etc/mpd.conf
+change music_directory "path_to_spotify-alarm/mp3"
+```
 
 #### get spotify IDs
 https://www.mopidy.com/authenticate/#spotify
