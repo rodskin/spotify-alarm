@@ -15,19 +15,19 @@ import datetime
 import json
 import math
 import time
-try:
-    import RPi.GPIO as GPIO
-except ImportError:
-    import GPIOmock as GPIO
-    print('TESTING')
+from gpiozero import LED, Button
+from signal import pause
 import urllib2
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(etc.config.pin_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(etc.config.pin_led, GPIO.OUT)   # Set pin mode as output
+#GPIO.setmode(GPIO.BCM)
+#GPIO.setup(etc.config.pin_button, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+#GPIO.setup(etc.config.pin_led, GPIO.OUT)   # Set pin mode as output
 #p = GPIO.PWM(etc.config.pin_led, 1000)     # set Frequece to 1KHz
+
+led = LED(etc.config.pin_led)
+button = Button(etc.config.pin_button, False)
 
 def internet_on():
     try:
@@ -38,7 +38,7 @@ def internet_on():
 
 
 def readTime ():
-    GPIO.output(etc.config.pin_led, GPIO.HIGH)
+    led.on()
     date = datetime.datetime.now()
     current_time = "Il est " + str(date.hour) + 'h' + str(date.minute)
 
@@ -64,10 +64,10 @@ def stopPlaylist () :
     os.system('mpc clear')
     return
 def snooze():
-    GPIO.output(etc.config.pin_led, GPIO.LOW)
+    led.off()
     stopPlaylist()
-    time.sleep(etc.config.time_snooze)
-    readTime()
+    time.sleep(etc.config.time_snooze * 60)
+    #readTime()
     playPlaylist()
     return
 def ledBreathe () :
@@ -136,21 +136,36 @@ def data_output(data):
     print('Pressure: {}'.format(data['pressure']))
     print('')
     print('---------------------------------------')
+def buttonPressed ():
+    print('Pressed')
+    start = time.time()
+    time.sleep(0.2)
+    while button.is_pressed:
+        time.sleep(0.01)
+        if ((time.time() - start) > 3 ) :
+            print("Long Press > 3")
+            stopScript()
+            
+    length = time.time() - start
+
+    if length <= 3:
+        print("Short Press")
+        snooze()
 def stopScript () :
     print("Long Press")
     stopPlaylist()
     os.system('mpg123 ' + dir_path + '/mp3/stopping.mp3')
     i = 1
     for i in range(0, 3):
-        GPIO.output(etc.config.pin_led, GPIO.LOW)
+        led.off()
         time.sleep(0.5)
-        GPIO.output(etc.config.pin_led, GPIO.HIGH)
+        led.on()
         time.sleep(0.5)
-    GPIO.output(etc.config.pin_led, GPIO.LOW)
-    GPIO.cleanup()
+    led.off()
+    #GPIO.cleanup()
     sys.exit()
 def load () :
-    GPIO.output(etc.config.pin_led, GPIO.LOW)
+    led.off()
     #p.start(0)
     stopPlaylist()
     os.system('amixer set Master ' + str(etc.config.volume_music) + '%')
@@ -162,8 +177,8 @@ load()
 print('has connection: ' + str(internet_on()))
 
 
-readTime()
-sys.exit()
+#readTime()
+#sys.exit()
 if (internet_on()):
     playPlaylist()
 else :
@@ -171,21 +186,6 @@ else :
 #sys.exit()
 #GPIO.add_event_detect(etc.config.pin_button, GPIO.RISING, callback=buttonPress, bouncetime=button_bounce_time)
 
-while True:
-    GPIO.wait_for_edge(etc.config.pin_button, GPIO.FALLING)
-    print('Pressed')
-    start = time.time()
-    time.sleep(0.2)
+button.when_pressed = buttonPressed
 
-    while GPIO.input(etc.config.pin_button) == GPIO.LOW:
-        time.sleep(0.01)
-        if ((time.time() - start) > 3 ) :
-            print("Long Press > 3")
-            stopScript()
-    length = time.time() - start
-
-    if length <= 3:
-        print("Short Press")
-        snooze()
-
-GPIO.cleanup()           # clean up GPIO on normal exit
+pause ()
